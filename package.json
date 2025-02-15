@@ -1,0 +1,29 @@
+{
+  "name": "members-only",
+  "type": "module",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "dev": "NODE_ENV=development node --watch app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "compression": "^1.8.0",
+    "connect-pg-simple": "^10.0.0",
+    "dotenv": "^16.4.7",
+    "ejs": "^3.1.10",
+    "express": "^4.21.2",
+    "express-session": "^1.18.1",
+    "express-validator": "^7.2.1",
+    "helmet": "^8.0.0",
+    "passport": "^0.7.0",
+    "passport-local": "^1.0.0",
+    "pg": "^8.13.3",
+    "winston": "^3.17.0",
+    "winston-daily-rotate-file": "^5.0.0"
+  }
+}
