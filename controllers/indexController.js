@@ -1,6 +1,8 @@
-async function getIndexPage(req, res) {
-  res.send("Hello Arthur");
-}
+import asyncHandler from "../utils/asyncHandler.js";
+
+const getIndexPage = asyncHandler(async (req, res) => {
+  res.render("index");
+});
 
 export default {
   getIndexPage,
