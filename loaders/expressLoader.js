@@ -1,27 +1,20 @@
 import express from "express";
 import path from "node:path";
 import compression from "compression";
-import helmet from "helmet";
-import { fileURLToPath } from "node:url";
+import helmetMiddleware from "../middleware/helmet.js";
 import routes from "../api/index.js";
+import AppError from "../utils/AppError.js";
+import errorHandler from "../middleware/errorHandler.js";
+import { fileURLToPath } from "node:url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-export default async function (app) {
+export default async function expressLoader(app) {
   // Compression
   app.use(compression());
 
   // Security headers
-  app.use(
-    helmet({
-      contentSecurityPolicy: {
-        directives: {
-          scriptSrc: ["'self'", "cdn.jsdelivr.net"],
-          styleSrc: ["'self'", "cdn.jsdelivr.net"],
-        },
-      },
-    })
-  );
+  app.use(helmetMiddleware);
 
   // Render host reverse proxy
   app.set("trust proxy", 1);
@@ -35,6 +28,14 @@ export default async function (app) {
   app.set("views", path.join(__dirname, "..", "views"));
   app.set("view engine", "ejs");
 
-  // Load routes
+  // Load all routes
   app.use("/", routes);
+
+  // 404
+  app.use((req, res, next) => {
+    next(new AppError(`Route "${req.originalUrl}" Not Found`, 404));
+  });
+
+  // Error hanlder
+  app.use(errorHandler);
 }

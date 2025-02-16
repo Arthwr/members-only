@@ -5,15 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.20.0/cdn/themes/light.css" />
     <link rel="stylesheet" href="/stylesheets/main.css" />
-    <script
-      type="module"
-      src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.20.0/cdn/shoelace-autoloader.js"
-    ></script>
-    <title>Members Only</title>
+    <title>Error - <%= response.status %></title>
   </head>
   <body>
-    <div class="container">
-      <h1>Members Only</h1>
-    </div>
+    <main class="error-container">
+      <div>
+        <h1>Oops! Something went wrong</h1>
+        <div><%= response.status %> : <%= response.message %></div>
+      </div>
+      <a href="/"> Return home </a>
+    </main>
   </body>
 </html>

@@ -18,3 +18,16 @@ h1 {
   display: grid;
   place-content: center;
 }
+
+/* Error Page */
+.error-container {
+  height: 100%;
+  display: grid;
+  gap: 1.5rem;
+  place-content: center;
+  justify-items: center;
+}
+
+.error-container > div {
+  text-align: center;
+}
