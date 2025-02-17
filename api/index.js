@@ -1,5 +1,6 @@
 import { Router } from "express";
 import indexRouter from "./routes/indexRoutes.js";
+import houseRouter from "./routes/houseRoutes.js";
 
 const routes = Router();
 
@@ -7,5 +8,6 @@ const routes = Router();
 routes.get("/favicon.ico", (req, res) => res.status(204).end());
 
 routes.use("/", indexRouter);
+routes.use("/house", houseRouter);
 
 export default routes;
