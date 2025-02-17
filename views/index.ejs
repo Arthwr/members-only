@@ -12,8 +12,27 @@
     <title>Members Only</title>
   </head>
   <body>
-    <div class="container">
-      <h1>Members Only</h1>
+    <div class="index-container">
+      <h1>
+        members <br />
+        only
+      </h1>
+      <form action="/sign-in" method="post">
+        <sl-alert variant="warning">
+          <sl-icon slot="icon" name="info-circle"></sl-icon>
+          <strong>Username and password do not match.</strong>
+        </sl-alert>
+        <sl-card class="login-container">
+          <sl-input label="Name" clearable></sl-input>
+          <sl-input type="password" label="Password" password-toggle clearable> </sl-input>
+          <sl-button type="submit" variant="primary">Sign In</sl-button>
+          <sl-button href="/clubhouse" variant="text">Continue as a Guest</sl-button>
+        </sl-card>
+      </form>
+      <div class="sign-in-container">
+        <div>Don't have account yet?</div>
+        <span><a href="/sign-up">Create!</a></span>
+      </div>
     </div>
   </body>
 </html>

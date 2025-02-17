@@ -8,22 +8,51 @@ body {
   height: 100vh;
 }
 
+/* Index */
 h1 {
-  font-size: var(--sl-font-size-2x-large);
+  text-align: center;
+  letter-spacing: var(--sl-letter-spacing-loose);
+  font-size: var(--sl-font-size-3x-large);
   font-weight: var(--sl-font-weight-semibold);
 }
 
-.container {
+/* Login container */
+.index-container {
   height: 100%;
   display: grid;
   place-content: center;
+  gap: var(--sl-spacing-3x-large);
+}
+
+sl-card.login-container::part(body) {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sl-spacing-x-large);
+  --padding: var(--sl-spacing-2x-large);
+}
+
+.login-container sl-input::part(form-control-help-text) {
+  color: red;
+  margin-top: 0.5rem;
+}
+
+.login-container sl-input > div {
+  display: none;
+  align-items: flex-start;
+  gap: var(--sl-spacing-x-small);
+}
+
+.sign-in-container {
+  display: flex;
+  justify-content: center;
+  gap: var(--sl-spacing-x-small);
 }
 
 /* Error Page */
 .error-container {
   height: 100%;
   display: grid;
-  gap: 1.5rem;
+  gap: var(--sl-spacing-x-large);
   place-content: center;
   justify-items: center;
 }
