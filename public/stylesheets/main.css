@@ -9,14 +9,18 @@ body {
 }
 
 /* Index */
-h1 {
+h1,
+h2 {
   text-align: center;
   letter-spacing: var(--sl-letter-spacing-loose);
-  font-size: var(--sl-font-size-3x-large);
   font-weight: var(--sl-font-weight-semibold);
 }
 
-/* Login container */
+h1 {
+  font-size: var(--sl-font-size-3x-large);
+}
+
+/* Login Sing-in */
 .index-container {
   height: 100%;
   display: grid;
@@ -37,12 +41,12 @@ sl-card.login-container::part(body) {
 }
 
 .login-container sl-input > div {
-  display: none;
+  display: flex;
   align-items: flex-start;
   gap: var(--sl-spacing-x-small);
 }
 
-.sign-in-container {
+.footer {
   display: flex;
   justify-content: center;
   gap: var(--sl-spacing-x-small);

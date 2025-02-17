@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.20.0/cdn/themes/light.css" />
+    <link rel="stylesheet" href="/stylesheets/main.css" />
+    <script
+      type="module"
+      src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.20.0/cdn/shoelace-autoloader.js"
+    ></script>
+    <title>Members Only</title>
+  </head>
+  <body>
+    <div class="index-container">
+      <h1>join us</h1>
+      <form action="/sign-up" method="post">
+        <sl-alert variant="warning">
+          <sl-icon slot="icon" name="info-circle"></sl-icon>
+          <strong></strong>
+        </sl-alert>
+        <sl-card class="login-container">
+          <sl-input label="Name" clearable>
+            <% if (locals.validationErrors) { %>
+            <div slot="help-text" class="help-text-container">
+              <sl-icon name="exclamation-diamond"></sl-icon>
+              <span></span>
+            </div>
+            <% } %>
+          </sl-input>
+          <sl-input type="password" label="Password" password-toggle clearable>
+            <% if (locals.validationErrors) { %>
+            <div slot="help-text" class="help-text-container">
+              <sl-icon name="exclamation-diamond"></sl-icon>
+              <span></span>
+            </div>
+            <% } %>
+          </sl-input>
+          <sl-button type="submit" variant="primary">Sign Up</sl-button>
+        </sl-card>
+      </form>
+      <div class="footer">
+        <a href="/">Return</a>
+      </div>
+    </div>
+  </body>
+</html>

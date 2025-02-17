@@ -1,3 +1,4 @@
+import AppError from "../utils/AppError.js";
 import logger from "../utils/logger.js";
 
 const errorHandler = (err, req, res, next) => {
@@ -8,6 +9,16 @@ const errorHandler = (err, req, res, next) => {
     status,
     message,
   };
+
+  if (!(err instanceof AppError)) {
+    logger.error(err, { route: req.originalUrl, method: req.method });
+    return res.status(response.status).render("errors/error", {
+      response: {
+        status: 500,
+        message: "Internal Server Error",
+      },
+    });
+  }
 
   logger.error(err, { route: req.originalUrl, method: req.method });
 
