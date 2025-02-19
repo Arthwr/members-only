@@ -5,7 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script type="module" src="/scripts/main.js" defer></script>
     <link rel="stylesheet" href="/stylesheets/main.css" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.20.0/cdn/themes/light.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.20.0/cdn/themes/light.css"
+    />
     <script
       type="module"
       src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.20.0/cdn/shoelace-autoloader.js"
@@ -22,13 +25,21 @@
         <form action="/sign-in" method="post">
           <sl-alert variant="warning">
             <sl-icon slot="icon" name="info-circle"></sl-icon>
-            <strong>Username and password do not match.</strong>
+            <strong></strong>
           </sl-alert>
           <sl-card class="login-container">
-            <sl-input label="Name" clearable></sl-input>
-            <sl-input type="password" label="Password" password-toggle clearable> </sl-input>
+            <sl-input label="Username" clearable></sl-input>
+            <sl-input
+              type="password"
+              label="Password"
+              password-toggle
+              clearable
+            >
+            </sl-input>
             <sl-button type="submit" variant="primary">Sign In</sl-button>
-            <sl-button href="/house" variant="text">Continue as a Guest</sl-button>
+            <sl-button href="/house" variant="text"
+              >Continue as a Guest</sl-button
+            >
           </sl-card>
         </form>
         <div class="footer">

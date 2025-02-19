@@ -63,7 +63,7 @@ sl-card.login-container::part(body) {
 
 /* Error Page */
 .error-container {
-  height: 100%;
+  height: 100vh;
   display: grid;
   gap: var(--sl-spacing-x-large);
   place-content: center;

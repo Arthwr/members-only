@@ -1,4 +1,4 @@
-import dotenv from "dotenv";
+import dotenv from 'dotenv';
 
 dotenv.config();
 
@@ -9,4 +9,6 @@ export default {
   logs: {
     level: process.env.LOG_LEVEL,
   },
+  admin_username: process.env.ADMIN_NAME,
+  admin_pwd: process.env.ADMIN_PWD,
 };
