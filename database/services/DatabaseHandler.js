@@ -1,9 +1,12 @@
+import bcrypt from 'bcryptjs';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import pool from '../pool.js';
-import logger from '../../utils/logger.js';
+
+import config from '../../config/index.js';
 import { AppError } from '../../utils/Errors.js';
+import logger from '../../utils/logger.js';
+import pool from '../config/pool.js';
 
 export default class DatabaseHandler {
   static async _getSqlQuery(sqlRelativePath) {
@@ -22,7 +25,7 @@ export default class DatabaseHandler {
           type: 'DatabaseError',
           meta: { filePath },
         },
-        error
+        error,
       );
     }
   }
@@ -41,17 +44,30 @@ export default class DatabaseHandler {
           type: 'DatabaseError',
           meta: { sqlQuery, params },
         },
-        error
+        error,
       );
     }
   }
 
-  static async _withTransaction(client, callback) {
+  static async _withClient(callback) {
+    const client = await pool.connect();
+
+    try {
+      return await callback(client);
+    } finally {
+      client.release();
+    }
+  }
+
+  static async _withTransaction(callback) {
+    const client = await pool.connect();
+
     try {
       logger.info('DB: starting transaction.');
-      await client.query('BEGIN');
 
+      await client.query('BEGIN');
       const result = await callback(client);
+
       await client.query('COMMIT');
       logger.info('DB: transaction completed successfully.');
 
@@ -63,7 +79,6 @@ export default class DatabaseHandler {
       });
 
       await client.query('ROLLBACK');
-
       throw error;
     } finally {
       client.release();
@@ -71,21 +86,79 @@ export default class DatabaseHandler {
     }
   }
 
-  static async initializeDatabase() {
-    const fileName = 'create_tables.sql';
-    const client = await pool.connect();
+  static async _adminExists(client) {
+    const fileName = 'get_admin_exists.sql';
+    const sql = await this._getSqlQuery(fileName);
 
+    const result = await this._query(client, sql, [
+      config.admin_username,
+      true,
+    ]);
+
+    return result[0].exists;
+  }
+
+  static async _createTables(client) {
+    const fileName = 'create_tables.sql';
+    const sql = await this._getSqlQuery(fileName);
+
+    await this._query(client, sql, []);
+  }
+
+  static async _addAdmin(client, username, password) {
+    const fileName = 'add_admin.sql';
+
+    const sql = await this._getSqlQuery(fileName);
+    const hash = await bcrypt.hash(password, 10);
+
+    await this._query(client, sql, [username, hash, true]);
+  }
+
+  static async addUser(username, password) {
+    return this._withClient(async (client) => {
+      const fileName = 'add_user.sql';
+
+      const sql = await this._getSqlQuery(fileName);
+      const hash = await bcrypt.hash(password, 10);
+
+      await this._query(client, sql, [username, hash]);
+    });
+  }
+
+  static async userExists(username) {
+    return this._withClient(async (client) => {
+      const fileName = 'get_user_exists.sql';
+
+      const sql = await this._getSqlQuery(fileName);
+      const result = await this._query(client, sql, [username]);
+
+      return result[0].exists;
+    });
+  }
+
+  static async initializeDatabase() {
     try {
-      await this._withTransaction(client, async () => {
-        const sql = await this._getSqlQuery(fileName);
-        await this._query(client, sql, []);
+      return this._withTransaction(async (txClient) => {
+        await this._createTables(txClient);
+
+        const adminExists = await this._adminExists(txClient);
+
+        if (!adminExists) {
+          logger.info('Creating admin user...');
+          await this._addAdmin(
+            txClient,
+            config.admin_username,
+            config.admin_pwd,
+          );
+          logger.info('Admin user created successfully.');
+        } else {
+          logger.info('Admin user already exists, skipping creation.');
+        }
+
+        logger.info('Database tables created successfully.');
       });
-      logger.info('Database tables created successfully.');
     } catch (error) {
-      logger.error(`Database initialization failed:`, {
-        message: error.message,
-        stack: error.stack,
-      });
+      logger.error('Database initialization failed');
     }
   }
 }

@@ -1,7 +1,7 @@
 CREATE TABLE
     IF NOT EXISTS members (
         id INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-        username VARCHAR(255) NOT NULL,
+        username VARCHAR(255) NOT NULL UNIQUE,
         password VARCHAR(255) NOT NULL,
-        isAdmin BOOLEAN DEFAULT FALSE
+        is_admin BOOLEAN DEFAULT FALSE
     );

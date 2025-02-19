@@ -12,6 +12,7 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "bcryptjs": "^3.0.2",
     "compression": "^1.8.0",
     "connect-pg-simple": "^10.0.0",
     "dotenv": "^16.4.7",
@@ -25,5 +26,8 @@
     "pg": "^8.13.3",
     "winston": "^3.17.0",
     "winston-daily-rotate-file": "^5.0.0"
+  },
+  "devDependencies": {
+    "@trivago/prettier-plugin-sort-imports": "^5.2.2"
   }
 }

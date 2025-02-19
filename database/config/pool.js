@@ -1,6 +1,7 @@
 import pg from 'pg';
-const { Pool } = pg;
 
-import config from '../config/index.js';
+import config from '../../config/index.js';
+
+const { Pool } = pg;
 
 export default new Pool({ connectionString: config.databaseUrl });

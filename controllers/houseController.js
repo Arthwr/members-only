@@ -1,7 +1,7 @@
-import asyncHandler from "../utils/asyncHandler.js";
+import asyncHandler from '../utils/asyncHandler.js';
 
 const getHousePage = asyncHandler(async (req, res) => {
-  res.render("house");
+  res.render('house');
 });
 
 export default {

@@ -1,10 +1,11 @@
+import compression from 'compression';
 import express from 'express';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import compression from 'compression';
-import helmetMiddleware from '../middleware/helmet.js';
+
 import routes from '../api/index.js';
 import errorHandler from '../middleware/errorHandler.js';
+import helmetMiddleware from '../middleware/helmet.js';
 import notFoundHandler from '../middleware/notFoundHandler.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));

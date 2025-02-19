@@ -1,7 +1,8 @@
 import winston from 'winston';
+import 'winston-daily-rotate-file';
+
 import config from '../config/index.js';
 import { NotFoundError } from './Errors.js';
-import 'winston-daily-rotate-file';
 
 const { format } = winston;
 
@@ -23,9 +24,9 @@ if (config.environment !== 'production') {
           return `[${info.timestamp}]:${info.level} ${
             info.stack || info.message
           } ${metaString}`;
-        })
+        }),
       ),
-    })
+    }),
   );
 } else {
   // Not logging 404 errors
@@ -56,7 +57,7 @@ if (config.environment !== 'production') {
       handleExceptions: true,
       handleRejections: true,
       format: format.combine(NotFoundFilter(), format.json()),
-    })
+    }),
   );
 }
 

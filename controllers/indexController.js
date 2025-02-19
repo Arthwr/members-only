@@ -1,11 +1,11 @@
-import asyncHandler from "../utils/asyncHandler.js";
+import asyncHandler from '../utils/asyncHandler.js';
 
 const getIndexPage = asyncHandler(async (req, res) => {
-  res.render("index");
+  res.render('index');
 });
 
 const getSignUpPage = asyncHandler(async (req, res) => {
-  res.render("sign-up");
+  res.render('sign-up');
 });
 
 export default {
