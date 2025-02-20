@@ -1,27 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script type="module" src="/scripts/main.js" defer></script>
-    <link rel="stylesheet" href="/stylesheets/main.css" />
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.20.0/cdn/themes/light.css"
-    />
-    <script
-      type="module"
-      src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.20.0/cdn/shoelace-autoloader.js"
-    ></script>
-    <title>Error - <%= response.status %></title>
-  </head>
+<%- include("../partials/head", { title: `Error ${response.status}` }) %>
+
   <body>
     <main class="error-container">
       <div>
         <h1>Oops! Something went wrong</h1>
-        <div><%= response.status %> : <%= response.message %></div>
+        <div>
+          <%= response.status %> : <%= response.message %>
+        </div>
       </div>
       <a href="/"> Return home </a>
     </main>
   </body>
+
 </html>

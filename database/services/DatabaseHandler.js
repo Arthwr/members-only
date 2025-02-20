@@ -16,7 +16,10 @@ export default class DatabaseHandler {
     try {
       const sql = await fs.readFile(filePath, { encoding: 'utf-8' });
 
-      return sql.trim();
+      return {
+        sql: sql.trim(),
+        fileName: sqlRelativePath,
+      };
     } catch (error) {
       throw new AppError(
         'Error reading SQL file',
@@ -30,10 +33,12 @@ export default class DatabaseHandler {
     }
   }
 
-  static async _query(client, sqlQuery, params) {
+  static async _query(client, sqlData, params) {
     try {
-      logger.info('DB: executing query', { sql: sqlQuery, params });
-      const result = await client.query(sqlQuery, params);
+      const { sql, fileName } = sqlData;
+
+      logger.info(`DB: executing query ${fileName}`, { sqlData, params });
+      const result = await client.query(sql, params);
 
       return result.rows;
     } catch (error) {
@@ -42,7 +47,7 @@ export default class DatabaseHandler {
         {
           status: 500,
           type: 'DatabaseError',
-          meta: { sqlQuery, params },
+          meta: { sqlData, params },
         },
         error,
       );
@@ -87,10 +92,9 @@ export default class DatabaseHandler {
   }
 
   static async _adminExists(client) {
-    const fileName = 'get_admin_exists.sql';
-    const sql = await this._getSqlQuery(fileName);
+    const sqlData = await this._getSqlQuery('get_admin_exists.sql');
 
-    const result = await this._query(client, sql, [
+    const result = await this._query(client, sqlData, [
       config.admin_username,
       true,
     ]);
@@ -99,38 +103,31 @@ export default class DatabaseHandler {
   }
 
   static async _createTables(client) {
-    const fileName = 'create_tables.sql';
-    const sql = await this._getSqlQuery(fileName);
+    const sqlData = await this._getSqlQuery('create_tables.sql');
 
-    await this._query(client, sql, []);
+    await this._query(client, sqlData, []);
   }
 
   static async _addAdmin(client, username, password) {
-    const fileName = 'add_admin.sql';
-
-    const sql = await this._getSqlQuery(fileName);
+    const sqlData = await this._getSqlQuery('add_admin.sql');
     const hash = await bcrypt.hash(password, 10);
 
-    await this._query(client, sql, [username, hash, true]);
+    await this._query(client, sqlData, [username, hash, true]);
   }
 
   static async addUser(username, password) {
     return this._withClient(async (client) => {
-      const fileName = 'add_user.sql';
-
-      const sql = await this._getSqlQuery(fileName);
+      const sqlData = await this._getSqlQuery('add_user.sql');
       const hash = await bcrypt.hash(password, 10);
 
-      await this._query(client, sql, [username, hash]);
+      await this._query(client, sqlData, [username, hash]);
     });
   }
 
   static async userExists(username) {
     return this._withClient(async (client) => {
-      const fileName = 'get_user_exists.sql';
-
-      const sql = await this._getSqlQuery(fileName);
-      const result = await this._query(client, sql, [username]);
+      const sqlData = await this._getSqlQuery('get_user_exists.sql');
+      const result = await this._query(client, sqlData, [username]);
 
       return result[0].exists;
     });

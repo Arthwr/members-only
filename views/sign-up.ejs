@@ -1,20 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script type="module" src="/scripts/main.js" defer></script>
-    <link rel="stylesheet" href="/stylesheets/main.css" />
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.20.0/cdn/themes/light.css"
-    />
-    <script
-      type="module"
-      src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.20.0/cdn/shoelace-autoloader.js"
-    ></script>
-    <title>Members Only</title>
-  </head>
+
+<%- include("partials/head", { title: "Members Sign Up" }) %>
+
   <body>
     <main>
       <div class="index-container">
@@ -27,24 +15,19 @@
           <sl-card class="login-container">
             <sl-input label="Username" clearable>
               <% if (locals.validationErrors) { %>
-              <div slot="help-text" class="help-text-container">
-                <sl-icon name="exclamation-diamond"></sl-icon>
-                <span></span>
-              </div>
-              <% } %>
+                <div slot="help-text" class="help-text-container">
+                  <sl-icon name="exclamation-diamond"></sl-icon>
+                  <span></span>
+                </div>
+                <% } %>
             </sl-input>
-            <sl-input
-              type="password"
-              label="Password"
-              password-toggle
-              clearable
-            >
+            <sl-input type="password" label="Password" password-toggle clearable>
               <% if (locals.validationErrors) { %>
-              <div slot="help-text" class="help-text-container">
-                <sl-icon name="exclamation-diamond"></sl-icon>
-                <span></span>
-              </div>
-              <% } %>
+                <div slot="help-text" class="help-text-container">
+                  <sl-icon name="exclamation-diamond"></sl-icon>
+                  <span></span>
+                </div>
+                <% } %>
             </sl-input>
             <sl-button type="submit" variant="primary">Sign Up</sl-button>
           </sl-card>
@@ -55,4 +38,5 @@
       </div>
     </main>
   </body>
+
 </html>

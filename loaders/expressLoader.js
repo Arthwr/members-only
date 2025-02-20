@@ -5,7 +5,7 @@ import { fileURLToPath } from 'node:url';
 
 import routes from '../api/index.js';
 import errorHandler from '../middleware/errorHandler.js';
-import helmetMiddleware from '../middleware/helmet.js';
+import helmet from '../middleware/helmet.js';
 import notFoundHandler from '../middleware/notFoundHandler.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -15,7 +15,7 @@ export default async function expressLoader(app) {
   app.use(compression());
 
   // Security headers
-  app.use(helmetMiddleware);
+  app.use(helmet);
 
   // Render host reverse proxy
   app.set('trust proxy', 1);
