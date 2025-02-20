@@ -7,30 +7,29 @@
     <main>
       <div class="index-container">
         <h1>join us</h1>
-        <form action="/sign-up" method="post">
-          <sl-alert variant="warning">
-            <sl-icon slot="icon" name="info-circle"></sl-icon>
-            <strong></strong>
-          </sl-alert>
-          <sl-card class="login-container">
-            <sl-input label="Username" clearable>
-              <% if (locals.validationErrors) { %>
-                <div slot="help-text" class="help-text-container">
-                  <sl-icon name="exclamation-diamond"></sl-icon>
-                  <span></span>
-                </div>
-                <% } %>
-            </sl-input>
-            <sl-input type="password" label="Password" password-toggle clearable>
-              <% if (locals.validationErrors) { %>
-                <div slot="help-text" class="help-text-container">
-                  <sl-icon name="exclamation-diamond"></sl-icon>
-                  <span></span>
-                </div>
-                <% } %>
-            </sl-input>
-            <sl-button type="submit" variant="primary">Sign Up</sl-button>
-          </sl-card>
+        <form class="auth-form" action="/sign-up" method="post">
+          <% if (locals.alert) { %>
+            <%- include("partials/alert", { alert }) %>
+              <% } %>
+                <sl-card class="login-container">
+                  <sl-input name="username" label="Username" clearable>
+                    <% if (locals.validationErrors) { %>
+                      <div slot="help-text" class="help-text-container">
+                        <sl-icon name="exclamation-diamond"></sl-icon>
+                        <span></span>
+                      </div>
+                      <% } %>
+                  </sl-input>
+                  <sl-input name="password" type="password" label="Password" password-toggle clearable>
+                    <% if (locals.validationErrors) { %>
+                      <div slot="help-text" class="help-text-container">
+                        <sl-icon name="exclamation-diamond"></sl-icon>
+                        <span></span>
+                      </div>
+                      <% } %>
+                  </sl-input>
+                  <sl-button type="submit" variant="primary">Sign Up</sl-button>
+                </sl-card>
         </form>
         <div class="footer">
           <a href="/">Return</a>

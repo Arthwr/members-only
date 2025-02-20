@@ -1,5 +1,5 @@
 export class AppError extends Error {
-  constructor(message, { status, type, meta }, cause = null) {
+  constructor(message, { status, type, meta }, cause = null, expose = false) {
     if (cause instanceof AppError) {
       return cause;
     }
@@ -9,6 +9,7 @@ export class AppError extends Error {
     this.type = type;
     this.meta = meta;
     this.cause = cause;
+    this.expose = expose;
   }
 }
 
@@ -18,6 +19,7 @@ export class NotFoundError extends AppError {
       status: 404,
       type: 'NotFoundError',
       meta: { method, path },
+      expose: true,
     });
   }
 }

@@ -47,7 +47,7 @@ export default class DatabaseHandler {
         {
           status: 500,
           type: 'DatabaseError',
-          meta: { sqlData, params },
+          meta: { sqlData },
         },
         error,
       );
@@ -91,6 +91,19 @@ export default class DatabaseHandler {
     }
   }
 
+  static async _createTables(client) {
+    const sqlData = await this._getSqlQuery('create_tables.sql');
+
+    await this._query(client, sqlData, []);
+  }
+
+  static async _userExists(client, username) {
+    const sqlData = await this._getSqlQuery('get_user_exists.sql');
+    const result = await this._query(client, sqlData, [username]);
+
+    return result[0].exists;
+  }
+
   static async _adminExists(client) {
     const sqlData = await this._getSqlQuery('get_admin_exists.sql');
 
@@ -102,34 +115,27 @@ export default class DatabaseHandler {
     return result[0].exists;
   }
 
-  static async _createTables(client) {
-    const sqlData = await this._getSqlQuery('create_tables.sql');
-
-    await this._query(client, sqlData, []);
-  }
-
   static async _addAdmin(client, username, password) {
     const sqlData = await this._getSqlQuery('add_admin.sql');
-    const hash = await bcrypt.hash(password, 10);
+    const hashedPwd = await bcrypt.hash(password, 10);
 
-    await this._query(client, sqlData, [username, hash, true]);
+    await this._query(client, sqlData, [username, hashedPwd, true, true]);
   }
 
   static async addUser(username, password) {
     return this._withClient(async (client) => {
+      const userExists = await this._userExists(client, username);
+
       const sqlData = await this._getSqlQuery('add_user.sql');
-      const hash = await bcrypt.hash(password, 10);
+      const hashedPwd = await bcrypt.hash(password, 10);
 
-      await this._query(client, sqlData, [username, hash]);
-    });
-  }
+      if (userExists) {
+        return null;
+      }
 
-  static async userExists(username) {
-    return this._withClient(async (client) => {
-      const sqlData = await this._getSqlQuery('get_user_exists.sql');
-      const result = await this._query(client, sqlData, [username]);
+      const result = await this._query(client, sqlData, [username, hashedPwd]);
 
-      return result[0].exists;
+      return result[0];
     });
   }
 
@@ -141,21 +147,21 @@ export default class DatabaseHandler {
         const adminExists = await this._adminExists(txClient);
 
         if (!adminExists) {
-          logger.info('Creating admin user...');
+          logger.info('DB: areating admin user...');
           await this._addAdmin(
             txClient,
             config.admin_username,
             config.admin_pwd,
           );
-          logger.info('Admin user created successfully.');
+          logger.info('DB: admin user created successfully.');
         } else {
-          logger.info('Admin user already exists, skipping creation.');
+          logger.info('DB: admin user already exists, skipping creation.');
         }
 
-        logger.info('Database tables created successfully.');
+        logger.info('DB: database tables created successfully.');
       });
     } catch (error) {
-      logger.error('Database initialization failed');
+      logger.error('DB: database initialization failed');
     }
   }
 }

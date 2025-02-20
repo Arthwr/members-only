@@ -1,3 +1,4 @@
+import util from 'util';
 import winston from 'winston';
 import 'winston-daily-rotate-file';
 
@@ -19,11 +20,10 @@ if (config.environment !== 'production') {
         format.printf((info) => {
           const metaString =
             info.meta && Object.keys(info.meta).length > 0
-              ? `\n ${JSON.stringify(info.meta)}`
+              ? `\n ${util.inspect(info.meta, { depth: null })}`
               : '';
-          return `[${info.timestamp}]:${info.level} ${
-            info.stack || info.message
-          } ${metaString}`;
+          return `[${info.timestamp}]:${info.level}${info.message || info.stack} ${info.cause ?? ''}
+          ${metaString}`;
         }),
       ),
     }),

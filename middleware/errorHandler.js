@@ -5,14 +5,14 @@ const errorHandler = (err, req, res, next) => {
   let status = err.status;
   let message = err.message;
 
-  if (!(err instanceof AppError)) {
+  if (!(err instanceof AppError) || !err.expose) {
     status = 500;
     message = 'Internal Server Error';
   }
 
   const response = { status, message };
 
-  logger.error(err, {
+  logger.error({
     message: err.message,
     type: err.type || 'UnknownError',
     route: req.originalUrl,

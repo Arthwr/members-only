@@ -5,5 +5,5 @@ SELECT
         FROM
             members
         WHERE
-            username = $1
+            username ILIKE $1
     );
