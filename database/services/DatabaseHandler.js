@@ -4,8 +4,8 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import config from '../../config/index.js';
+import logger from '../../logging/logger.js';
 import { AppError } from '../../utils/Errors.js';
-import logger from '../../utils/logger.js';
 import pool from '../config/pool.js';
 
 export default class DatabaseHandler {
@@ -21,15 +21,12 @@ export default class DatabaseHandler {
         fileName: sqlRelativePath,
       };
     } catch (error) {
-      throw new AppError(
-        'Error reading SQL file',
-        {
-          status: 500,
-          type: 'DatabaseError',
-          meta: { filePath },
-        },
-        error,
-      );
+      throw new AppError('Error reading SQL file', {
+        status: 500,
+        type: 'DatabaseError',
+        meta: { filePath },
+        cause: error,
+      });
     }
   }
 
@@ -42,21 +39,17 @@ export default class DatabaseHandler {
 
       return result.rows;
     } catch (error) {
-      throw new AppError(
-        'Error during query execution',
-        {
-          status: 500,
-          type: 'DatabaseError',
-          meta: { sqlData },
-        },
-        error,
-      );
+      throw new AppError('Error during query execution', {
+        status: 500,
+        type: 'DatabaseError',
+        meta: { sqlData },
+        cause: error,
+      });
     }
   }
 
   static async _withClient(callback) {
     const client = await pool.connect();
-
     try {
       return await callback(client);
     } finally {
@@ -92,9 +85,13 @@ export default class DatabaseHandler {
   }
 
   static async _createTables(client) {
-    const sqlData = await this._getSqlQuery('create_tables.sql');
+    // App tables
+    const membersSql = await this._getSqlQuery('create_tables.sql');
+    // Session tables
+    const sessionSql = await this._getSqlQuery('create_session_table.sql');
 
-    await this._query(client, sqlData, []);
+    await this._query(client, membersSql, []);
+    await this._query(client, sessionSql, []);
   }
 
   static async _userExists(client, username) {
@@ -122,6 +119,28 @@ export default class DatabaseHandler {
     await this._query(client, sqlData, [username, hashedPwd, true, true]);
   }
 
+  // Read methods
+  static async getUserById(id) {
+    return DatabaseHandler._withClient(async (client) => {
+      const sqlData = await DatabaseHandler._getSqlQuery('get_userById.sql');
+      const result = await DatabaseHandler._query(client, sqlData, [id]);
+
+      return result.length > 0 ? result[0] : null;
+    });
+  }
+
+  static async getUserByUsername(username) {
+    return DatabaseHandler._withClient(async (client) => {
+      const sqlData = await DatabaseHandler._getSqlQuery(
+        'get_userByUsername.sql',
+      );
+      const result = await DatabaseHandler._query(client, sqlData, [username]);
+
+      return result.length > 0 ? result[0] : null;
+    });
+  }
+
+  // Write methods
   static async addUser(username, password) {
     return this._withClient(async (client) => {
       const userExists = await this._userExists(client, username);

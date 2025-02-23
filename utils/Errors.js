@@ -1,15 +1,17 @@
 export class AppError extends Error {
-  constructor(message, { status, type, meta }, cause = null, expose = false) {
-    if (cause instanceof AppError) {
-      return cause;
+  constructor(message, options = {}) {
+    let originalCause = options.cause;
+
+    if (originalCause instanceof AppError && originalCause.cause) {
+      originalCause = originalCause.cause;
     }
 
-    super(message);
-    this.status = status;
-    this.type = type;
-    this.meta = meta;
-    this.cause = cause;
-    this.expose = expose;
+    super(message, { cause: originalCause });
+
+    this.status = options.status;
+    this.type = options.type;
+    this.meta = options.meta;
+    this.expose = options.expose !== undefined ? options.expose : false;
   }
 }
 

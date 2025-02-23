@@ -1,9 +1,9 @@
-import util from 'util';
 import winston from 'winston';
 import 'winston-daily-rotate-file';
 
 import config from '../config/index.js';
-import { NotFoundError } from './Errors.js';
+import { NotFoundError } from '../utils/Errors.js';
+import { formatErrorLog, formatRegularLog } from './logFormatter.js';
 
 const { format } = winston;
 
@@ -12,19 +12,18 @@ const transports = [];
 if (config.environment !== 'production') {
   transports.push(
     new winston.transports.Console({
+      level: 'info',
       format: format.combine(
-        format.colorize({ all: true }),
         format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss.SSS' }),
+        format.colorize({ all: true }),
         format.errors({ stack: true }),
-        format.align(),
         format.printf((info) => {
-          const metaString =
-            info.meta && Object.keys(info.meta).length > 0
-              ? `\n ${util.inspect(info.meta, { depth: null })}`
-              : '';
-          return `[${info.timestamp}]:${info.level}${info.message || info.stack} ${info.cause ?? ''}
-          ${metaString}`;
+          if (info[Symbol.for('level')] === 'error') {
+            return formatErrorLog(info);
+          }
+          return formatRegularLog(info);
         }),
+        format.align(),
       ),
     }),
   );

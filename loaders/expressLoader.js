@@ -2,28 +2,50 @@ import compression from 'compression';
 import express from 'express';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import passport from 'passport';
 
 import routes from '../api/index.js';
 import errorHandler from '../middleware/errorHandler.js';
-import helmet from '../middleware/helmet.js';
+import helmetMiddleware from '../middleware/helmet.js';
 import notFoundHandler from '../middleware/notFoundHandler.js';
+import configurePassport from '../middleware/passport.js';
+import sessionMiddleware from '../middleware/session.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export default async function expressLoader(app) {
+  // Render host reverse proxy
+  app.set('trust proxy', 1);
+
   // Compression
   app.use(compression());
 
   // Security headers
-  app.use(helmet);
+  app.use(helmetMiddleware);
 
-  // Render host reverse proxy
-  app.set('trust proxy', 1);
+  // Static
+  app.use(express.static(path.join(__dirname, '..', 'public')));
 
-  // Default middleware setup
+  // Deny browser errors on favicon requests
+  app.use((req, res, next) => {
+    if (req.path === '/favicon.ico') {
+      return res.status(204).end();
+    }
+    next();
+  });
+
+  // Body parsers
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
-  app.use(express.static(path.join(__dirname, '..', 'public')));
+
+  // Session
+  app.use(sessionMiddleware);
+
+  // Passport session support
+  app.use(passport.session());
+
+  // Passport strategy, serialization and deserialization
+  configurePassport();
 
   // View engine setup
   app.set('views', path.join(__dirname, '..', 'views'));

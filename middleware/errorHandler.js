@@ -1,5 +1,5 @@
+import logger from '../logging/logger.js';
 import { AppError } from '../utils/Errors.js';
-import logger from '../utils/logger.js';
 
 const errorHandler = (err, req, res, next) => {
   let status = err.status;
@@ -14,13 +14,14 @@ const errorHandler = (err, req, res, next) => {
 
   logger.error({
     message: err.message,
-    type: err.type || 'UnknownError',
+    type: err.type,
     route: req.originalUrl,
     method: req.method,
-    meta: err.meta || {},
+    meta: err.meta,
     stack: err.stack,
-    cause: err.cause ? err.cause.stack : undefined,
+    cause: err.cause,
   });
+
   res.status(response.status).render('errors/error', { response });
 };
 

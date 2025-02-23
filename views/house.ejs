@@ -5,7 +5,12 @@
 
   <body>
     <main>
-      <h2>Welcome Home, sir Arthur</h2>
+      <% if (locals.user) { %>
+        <h2>Welcome Back, <%= user.username %>
+        </h2>
+        <% } else { %>
+          <h2>Welcome to our club, Guest</h2>
+          <% } %>
     </main>
   </body>
 
