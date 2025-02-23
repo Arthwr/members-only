@@ -1,21 +1,32 @@
 import passport from 'passport';
 
+import messages from '../config/messages.js';
 import asyncHandler from '../utils/asyncHandler.js';
 
-const postLoginUser = [
+const getSignInPage = asyncHandler(async (req, res) => {
+  if (req.query.error === 'auth') {
+    req.session.alert = messages.auth.loginFailed;
+
+    return res.redirect('/sign-in');
+  }
+
+  res.render('sign-in');
+});
+
+const postAuthEndpoint = [
   passport.authenticate('local', {
-    failureRedirect: '/',
+    failureRedirect: '/sign-in?error=auth',
   }),
   asyncHandler(async (req, res) => {
-    console.log('Authenticated User:', req.user); // Debugging line
     if (!req.user) {
-      return res.redirect('/');
+      return res.redirect('/sign-in');
     }
 
-    res.render('house', { user: req.user });
+    res.redirect('/');
   }),
 ];
 
 export default {
-  postLoginUser,
+  getSignInPage,
+  postAuthEndpoint,
 };

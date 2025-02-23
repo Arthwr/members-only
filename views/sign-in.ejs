@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<%- include("partials/head", { title: "Members Only" }) %>
+
+  <body>
+    <main>
+      <div class="index-container">
+        <h1>
+          members <br />
+          only
+        </h1>
+        <form class="auth-form" action="/sign-in" method="post">
+          <% if (locals.alert) { %>
+            <%- include("partials/alert", { alert }) %>
+              <% } %>
+                <sl-card class="login-container">
+                  <sl-input name="username" label="Username" clearable></sl-input>
+                  <sl-input name="password" type="password" label="Password" password-toggle clearable>
+                  </sl-input>
+                  <sl-button type="submit" variant="primary">Sign In</sl-button>
+                  <sl-button href="/house" variant="text">Continue as a Guest</sl-button>
+                </sl-card>
+        </form>
+        <div class="footer">
+          <div>Don't have account yet?</div>
+          <span><a href="/sign-up">Create!</a></span>
+        </div>
+      </div>
+    </main>
+  </body>
+
+</html>

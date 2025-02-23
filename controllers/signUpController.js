@@ -1,6 +1,6 @@
+import messages from '../config/messages.js';
 import DatabaseHandler from '../database/services/DatabaseHandler.js';
 import asyncHandler from '../utils/asyncHandler.js';
-import capitalizeString from '../utils/capitalizeString.js';
 
 const getSignUpPage = asyncHandler(async (req, res) => {
   res.render('sign-up');
@@ -13,20 +13,12 @@ const postSignUp = [
 
     if (!result) {
       return res.status(403).render('sign-up', {
-        alert: {
-          variant: 'warning',
-          message: `The username is unavailable or invalid.`,
-          detail: 'Please select another.',
-        },
+        alert: messages.auth.signUpFailed,
       });
     }
 
-    res.status(201).render('index', {
-      alert: {
-        variant: 'success',
-        message: `Thanks for joining us, ${capitalizeString(result.username)}!`,
-        detail: `You can now safely log in with your credentials.`,
-      },
+    res.status(201).render('sign-in', {
+      alert: messages.auth.signUpSuccess(username),
     });
   }),
 ];

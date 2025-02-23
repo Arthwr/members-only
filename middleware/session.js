@@ -13,6 +13,7 @@ const sessionMiddleware = session({
   resave: false,
   saveUninitialized: false,
   cookie: {
+    httpOnly: true,
     secure: config.environment === 'production' ? true : false,
     sameSite: 'strict',
   },
