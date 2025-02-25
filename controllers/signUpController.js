@@ -12,14 +12,12 @@ const postSignUp = [
     const result = await DatabaseHandler.addUser(username, password);
 
     if (!result) {
-      return res.status(403).render('sign-up', {
-        alert: messages.auth.signUpFailed,
-      });
+      req.session.alert = messages.auth.signUpFailed;
+      return res.status(403).redirect('sign-up');
     }
 
-    res.status(201).render('sign-in', {
-      alert: messages.auth.signUpSuccess(username),
-    });
+    req.session.alert = messages.auth.signUpSuccess(username);
+    res.status(201).redirect('sign-in');
   }),
 ];
 

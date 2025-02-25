@@ -85,13 +85,8 @@ export default class DatabaseHandler {
   }
 
   static async _createTables(client) {
-    // App tables
-    const membersSql = await this._getSqlQuery('create_tables.sql');
-    // Session tables
-    const sessionSql = await this._getSqlQuery('create_session_table.sql');
-
-    await this._query(client, membersSql, []);
-    await this._query(client, sessionSql, []);
+    const tablesSql = await this._getSqlQuery('create_tables.sql');
+    await this._query(client, tablesSql, []);
   }
 
   static async _userExists(client, username) {
@@ -124,7 +119,6 @@ export default class DatabaseHandler {
     return DatabaseHandler._withClient(async (client) => {
       const sqlData = await DatabaseHandler._getSqlQuery('get_userById.sql');
       const result = await DatabaseHandler._query(client, sqlData, [id]);
-
       return result.length > 0 ? result[0] : null;
     });
   }
@@ -137,6 +131,17 @@ export default class DatabaseHandler {
       const result = await DatabaseHandler._query(client, sqlData, [username]);
 
       return result.length > 0 ? result[0] : null;
+    });
+  }
+
+  static async getAllMessages() {
+    return DatabaseHandler._withClient(async (client) => {
+      const sqlData = await DatabaseHandler._getSqlQuery(
+        'get_all_messages.sql',
+      );
+      const result = await DatabaseHandler._query(client, sqlData, []);
+
+      return result.length > 0 ? result : null;
     });
   }
 
@@ -154,6 +159,21 @@ export default class DatabaseHandler {
 
       const result = await this._query(client, sqlData, [username, hashedPwd]);
 
+      return result.length > 0 ? result[0] : null;
+    });
+  }
+
+  static async storeMessage(username, message) {
+    return this._withClient(async (client) => {
+      const userExists = await this._userExists(client, username);
+
+      if (!userExists) {
+        return null;
+      }
+
+      const sqlData = await this._getSqlQuery('store_message.sql');
+      const result = await this._query(client, sqlData, [username, message]);
+
       return result[0];
     });
   }
@@ -166,7 +186,7 @@ export default class DatabaseHandler {
         const adminExists = await this._adminExists(txClient);
 
         if (!adminExists) {
-          logger.info('DB: areating admin user...');
+          logger.info('DB: creating admin user...');
           await this._addAdmin(
             txClient,
             config.admin_username,

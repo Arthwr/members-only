@@ -1,7 +1,9 @@
+import DatabaseHandler from '../database/services/DatabaseHandler.js';
 import asyncHandler from '../utils/asyncHandler.js';
 
 const getIndexPage = asyncHandler(async (req, res) => {
-  res.render('index', { user: req.user });
+  const posts = await DatabaseHandler.getAllMessages();
+  res.render('index', { user: req.user, posts });
 });
 
 export default {

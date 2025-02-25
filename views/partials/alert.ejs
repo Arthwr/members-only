@@ -1,9 +1,11 @@
-<sl-alert variant="<%= alert.variant %>" open>
-    <sl-icon slot="icon" name="info-circle"></sl-icon>
-    <strong>
-        <%= alert.message %>
-    </strong>
-    <div>
-        <%= alert.detail %>
-    </div>
-</sl-alert>
+<% if (locals.alert) { %>
+    <sl-alert class="alert-wrapper" variant="<%= alert.variant %>" open>
+        <sl-icon slot="icon" name="info-circle"></sl-icon>
+        <strong>
+            <%= alert.message %>
+        </strong>
+        <div>
+            <%= alert.detail %>
+        </div>
+    </sl-alert>
+    <% } %>

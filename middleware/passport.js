@@ -2,19 +2,20 @@ import bcrypt from 'bcryptjs';
 import passport from 'passport';
 import LocalStrategy from 'passport-local';
 
+import config from '../config/index.js';
 import userService from '../services/userService.js';
 
-const configurePassport = (app) => {
+const configurePassport = () => {
   passport.use(
     new LocalStrategy(async (username, password, done) => {
       try {
         const userData = await userService.findUserByUsername(username);
-        const match = await bcrypt.compare(password, userData.password);
+        const hashedPassword = userData ? userData.password : config.dummy_pwd;
+
+        const match = await bcrypt.compare(password, hashedPassword);
 
         if (!userData || !match) {
-          return done(null, false, {
-            message: 'Incorrect username or password',
-          });
+          return done(null, false);
         }
 
         return done(null, userData);
@@ -31,9 +32,14 @@ const configurePassport = (app) => {
   passport.deserializeUser(async (id, done) => {
     try {
       const user = await userService.findUserById(id);
+
+      if (!user) {
+        return done(null, false);
+      }
+
       process.nextTick(() => done(null, user));
     } catch (error) {
-      done(error);
+      done(error, null);
     }
   });
 };

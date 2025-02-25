@@ -5,14 +5,6 @@ const createUserFinder = (dbService, metaKey) => {
     try {
       const user = await dbService(value);
 
-      if (!user) {
-        throw new AppError('User not found', {
-          status: 404,
-          type: 'UserServiceError',
-          meta: { [metaKey]: value },
-        });
-      }
-
       return user;
     } catch (error) {
       throw new AppError(`Failed while retrieving user by ${metaKey}`, {

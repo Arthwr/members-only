@@ -12,4 +12,5 @@ export default {
   admin_username: process.env.ADMIN_NAME,
   admin_pwd: process.env.ADMIN_PWD,
   session_secret: process.env.SESSION_SECRET,
+  dummy_pwd: process.env.DUMMY_PWD,
 };

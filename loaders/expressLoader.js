@@ -10,6 +10,7 @@ import helmetMiddleware from '../middleware/helmet.js';
 import notFoundHandler from '../middleware/notFoundHandler.js';
 import configurePassport from '../middleware/passport.js';
 import sessionMiddleware from '../middleware/session.js';
+import clientUtils from '../utils/clientUtils.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -50,6 +51,9 @@ export default async function expressLoader(app) {
   // View engine setup
   app.set('views', path.join(__dirname, '..', 'views'));
   app.set('view engine', 'ejs');
+
+  // Util functions
+  app.locals.utils = clientUtils;
 
   // Load all routes
   app.use('/', routes);
