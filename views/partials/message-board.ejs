@@ -1,0 +1,38 @@
+<ul class="message-board">
+    <% if (locals.posts && locals.posts.length> 0) { %>
+        <% posts.forEach(post=> { %>
+            <li>
+                <div class="msg-topbar">
+                    <div>
+                        <span class="user"><b>
+                                <% if (user.is_member) { %>
+                                    <%= post.username %>
+                                        <% } else { %>
+                                            Anonym
+                                            <% } %>
+                            </b></span>
+                        <% if (user.is_member) { %>
+                            <span class="timestamp">at <%= utils.formatDate(post.sent_at) %>:</span>
+                            <% } else { %>
+                                <span class="timestamp">:</span>
+                                <% } %>
+                    </div>
+                    <% if (user.is_admin) { %>
+                        <form class="delete-btn" action="/posts/<%= post.id %>" method="post">
+                            <span>
+                                <sl-button type="submit" variant="text">Delete message</sl-button>
+                            </span>
+                        </form>
+                        <% } %>
+                </div>
+                <p class="message">
+                    <span>
+                        <%= post.text %>
+                    </span>
+                </p>
+            </li>
+            <% }) %>
+                <% } else {%>
+                    <div class="info">It's awfully quiet there... Care to make a first post?</div>
+                    <% } %>
+</ul>

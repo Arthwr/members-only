@@ -16,5 +16,4 @@ async function startServer() {
 
 startServer();
 
-// Bring table manipulation and storage of message with posts of users and so on.
 // Add input validation across all important routes

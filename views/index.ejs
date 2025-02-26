@@ -5,38 +5,19 @@
 
   <body>
     <main class="club">
-      <% if (locals.user) { %>
-        <h2>Welcome Back, <%= user.username %>
-        </h2>
-        <% } else { %>
-          <h2>Welcome to our club, Guest</h2>
-          <% } %>
-            <div class="board-wrapper">
-              <ul class="message-board">
-                <% if (locals.posts && locals.posts.length> 0) { %>
-                  <% posts.forEach(post=> { %>
-                    <li>
-                      <span class="user"><b>
-                          <%= post.username %>
-                        </b></span>
-                      <span class="timestamp">at <%= utils.formatDate(post.sent_at) %>:</span>
-                      <p class="message">
-                        <%= post.text %>
-                      </p>
-                    </li>
-                    <% }) %>
-                      <% } else {%>
-                        <div class="info">It's awfully quiet there... Care to make a first post?</div>
-                        <% } %>
-              </ul>
-              <%- include("partials/alert") %>
-                <%- include("partials/message-form") %>
-                  <div class="footer">
-                    <form action="/logout" method="post">
-                      <sl-button type="submit" variant="text">Logout</sl-button>
-                    </form>
-                  </div>
-            </div>
+      <div class="board-wrapper">
+        <div>
+          <%- include('partials/index-head') %>
+        </div>
+        <%- include('partials/message-board') %>
+          <%- include("partials/alert") %>
+            <%- include("partials/message-form") %>
+              <div class="footer">
+                <form action="/logout" method="post">
+                  <sl-button type="submit" variant="text">Logout</sl-button>
+                </form>
+              </div>
+      </div>
     </main>
 
   </body>

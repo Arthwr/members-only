@@ -38,5 +38,13 @@ export default {
       variant: 'success',
       message: 'Message sent successfully!',
     },
+    adminCouldntDeletePost: {
+      variant: 'warning',
+      message: 'Post not found or already deleted.',
+    },
+    adminDeletePostSuccess: {
+      variant: 'success',
+      message: 'Post deleted successfully.',
+    },
   },
 };

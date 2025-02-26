@@ -1,0 +1,27 @@
+<% if (locals.user) { %>
+    <h2>Welcome back home, <%= user.username %>
+    </h2>
+    <% } else { %>
+        <h2>Welcome to our club, Guest</h2>
+        <% } %>
+            <% if (!user.is_member) { %>
+                <div class="help-text">Authors and dates are hidden until you join club.</div>
+                <% } %>
+                    <div class="club-top-wrapper">
+                        <div class="status-panel">
+                            <div>Membership status: <% if (user.is_member) { %>
+                                    <img src="/assets/green.svg" alt="" width="14" height="14">
+                                    <% } else { %>
+                                        <img src="/assets/red.svg" alt="" width="14" height="14">
+                                        <% } %>
+                            </div>
+                            <% if (user.is_admin) { %>
+                                <div>Admin status:<img src="/assets/green.svg" alt="" width="14" height="14"></div>
+                                <% } %>
+                        </div>
+                        <% if (!user.is_member) { %>
+                            <div>
+                                <sl-button variant="primary">Join community</sl-button>
+                            </div>
+                            <% } %>
+                    </div>

@@ -178,6 +178,16 @@ export default class DatabaseHandler {
     });
   }
 
+  // Delete methods
+  static async deletePost(id) {
+    return this._withClient(async (client) => {
+      const sqlData = await this._getSqlQuery('delete_post.sql');
+      const result = await this._query(client, sqlData, [id]);
+
+      return result.length > 0 ? result[0] : null;
+    });
+  }
+
   static async initializeDatabase() {
     try {
       return this._withTransaction(async (txClient) => {
