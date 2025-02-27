@@ -21,7 +21,13 @@
                         </div>
                         <% if (!user.is_member) { %>
                             <div>
-                                <sl-button variant="primary">Join community</sl-button>
+                                <sl-button variant="primary" class="join-btn">Join community</sl-button>
                             </div>
+                            <sl-dialog label="Membership" class="dialog-overview">
+                                <div>
+                                    <sl-input name="secret" label="Enter secret pass phrase:"></sl-input>
+                                    <sl-button>Confirm</sl-button>
+                                </div>
+                            </sl-dialog>
                             <% } %>
                     </div>

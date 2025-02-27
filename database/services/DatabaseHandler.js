@@ -114,7 +114,25 @@ export default class DatabaseHandler {
     await this._query(client, sqlData, [username, hashedPwd, true, true]);
   }
 
+  static async _addSecretPhrase(client, secret) {
+    const sqlData = await this._getSqlQuery('upsert_secret.sql');
+    const hash = await bcrypt.hash(secret, 10);
+    const result = await this._query(client, sqlData, [hash]);
+
+    return result.length > 0 ? result[0] : null;
+  }
+
   // Read methods
+  static async getMembershipSecret() {
+    return DatabaseHandler._withClient(async (client) => {
+      const sqlData = await DatabaseHandler._getSqlQuery(
+        'get_member_secret.sql',
+      );
+      const result = await DatabaseHandler._query(client, sqlData, []);
+      return result.length > 0 ? result[0] : null;
+    });
+  }
+
   static async getUserById(id) {
     return DatabaseHandler._withClient(async (client) => {
       const sqlData = await DatabaseHandler._getSqlQuery('get_userById.sql');
@@ -178,6 +196,14 @@ export default class DatabaseHandler {
     });
   }
 
+  // Update methods
+  static async setMembershipStatus(id) {
+    return this._withClient(async (client) => {
+      const sqlData = await this._getSqlQuery('set_membership.sql');
+      await this._query(client, sqlData, [id]);
+    });
+  }
+
   // Delete methods
   static async deletePost(id) {
     return this._withClient(async (client) => {
@@ -192,6 +218,7 @@ export default class DatabaseHandler {
     try {
       return this._withTransaction(async (txClient) => {
         await this._createTables(txClient);
+        await this._addSecretPhrase(txClient, config.membership_secret);
 
         const adminExists = await this._adminExists(txClient);
 

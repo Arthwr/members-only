@@ -47,4 +47,11 @@ export default {
       message: 'Post deleted successfully.',
     },
   },
+  membership: {
+    wrongSecret: {
+      variant: 'warning',
+      message: 'Wrong secret phrase!',
+      detail: 'Hint: favourite animal with 3 letters.',
+    },
+  },
 };
