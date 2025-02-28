@@ -2,6 +2,8 @@
 
 Self-learning project aimed at gaining experience with Passport.js, session management, and protected routes.
 
+![preview](https://github.com/user-attachments/assets/a00bd8b5-101e-4238-9f92-f10491b1f726)
+
 ## Tech Stack:
 1. Express
 2. PostgreSQL
