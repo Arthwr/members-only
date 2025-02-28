@@ -11,12 +11,13 @@
         </div>
         <%- include('partials/message-board') %>
           <%- include("partials/alert") %>
-            <%- include("partials/message-form") %>
-              <div class="footer">
-                <form action="/logout" method="post">
-                  <sl-button type="submit" variant="text">Logout</sl-button>
-                </form>
-              </div>
+            <%- include("partials/validation-errors") %>
+              <%- include("partials/message-form") %>
+                <div class="footer">
+                  <form action="/logout" method="post">
+                    <sl-button type="submit" variant="text">Logout</sl-button>
+                  </form>
+                </div>
       </div>
     </main>
 

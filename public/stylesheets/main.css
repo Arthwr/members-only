@@ -49,14 +49,16 @@ h2 {
 
 sl-card.login-container::part(body) {
   display: flex;
+  max-width: 400px;
   flex-direction: column;
   gap: var(--sl-spacing-x-large);
   --padding: var(--sl-spacing-2x-large);
 }
 
-.login-container sl-input::part(form-control-help-text) {
+.help-text-container {
   color: red;
   margin-top: 0.5rem;
+  font-size: var(--sl-font-size-small);
 }
 
 .login-container sl-input > div {
@@ -211,4 +213,11 @@ main.club h2 {
 
 .error-container > div {
   text-align: center;
+}
+
+/* Validation errors*/
+ul.validation-errors {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
 }

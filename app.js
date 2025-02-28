@@ -16,4 +16,4 @@ async function startServer() {
 
 startServer();
 
-// Add input validation across all important routes
+// Implement guest route

@@ -1,0 +1,11 @@
+<% if (locals.validationErrors) { %>
+    <div slot="help-text" class="help-text-container">
+        <ul class="validation-errors">
+            <% validationErrors.forEach(error=> { %>
+                <li>
+                    <%= error %>
+                </li>
+                <% }) %>
+        </ul>
+    </div>
+    <% } %>

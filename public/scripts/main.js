@@ -33,15 +33,12 @@ const updateMembership = () => {
   const inputValue = document.querySelector('.dialog-overview sl-input');
   const dialog = document.querySelector('.dialog-overview');
 
-  const secretValue = inputValue.value.trim();
-  if (!secretValue) return;
-
   const options = {
     method: 'put',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ secret: secretValue }),
+    body: JSON.stringify({ secret: inputValue.value }),
   };
 
   fetch('/joinclub', options)

@@ -17,6 +17,7 @@
                 <sl-card class="login-container">
                   <sl-input name="username" label="Username" clearable></sl-input>
                   <sl-input name="password" type="password" label="Password" password-toggle clearable>
+                    <%- include('partials/validation-errors') %>
                   </sl-input>
                   <sl-button type="submit" variant="primary">Sign In</sl-button>
                   <sl-button href="/house" variant="text">Continue as a Guest</sl-button>

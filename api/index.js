@@ -19,8 +19,8 @@ routes.use(sessionStore.messageHandlerMiddleware);
 routes.use('/sign-in', signInRouter);
 routes.use('/sign-up', signUpRouter);
 routes.use('/logout', logoutRouter);
-routes.use('/message', authMiddleware, messageRouter);
-routes.use('/joinclub', authMiddleware, memberRouter);
+routes.use('/message', authMiddleware, messageRouter); // message +
+routes.use('/joinclub', authMiddleware, memberRouter); // secret
 routes.use('/posts', authMiddleware, authAdmin, postsRouter);
 routes.use('/', authMiddleware, indexRouter);
 

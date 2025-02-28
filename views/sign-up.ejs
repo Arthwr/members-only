@@ -13,20 +13,9 @@
               <% } %>
                 <sl-card class="login-container">
                   <sl-input name="username" label="Username" clearable>
-                    <% if (locals.validationErrors) { %>
-                      <div slot="help-text" class="help-text-container">
-                        <sl-icon name="exclamation-diamond"></sl-icon>
-                        <span></span>
-                      </div>
-                      <% } %>
                   </sl-input>
                   <sl-input name="password" type="password" label="Password" password-toggle clearable>
-                    <% if (locals.validationErrors) { %>
-                      <div slot="help-text" class="help-text-container">
-                        <sl-icon name="exclamation-diamond"></sl-icon>
-                        <span></span>
-                      </div>
-                      <% } %>
+                    <%- include('partials/validation-errors') %>
                   </sl-input>
                   <sl-button type="submit" variant="primary">Sign Up</sl-button>
                 </sl-card>
